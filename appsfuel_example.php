@@ -13,8 +13,13 @@ $isSandbox = true;
 $api = new AFApi($clientId, $clientSecret, $state, $oauthRedirectUri, $isSandbox);
 
 //OAuth2 process (php SESSION based). The class will do Automatic header location 
-$api->oauthAuthentication(); //First step of oauth process, this automatically redirect the browser
-$accessToken = $api->getAccessToken(); //Second step addressed when the user is back to $oauthRedirectUri
+try {
+	$api->oauthAuthentication(); //First step of oauth process, this automatically redirect the browser
+	$accessToken = $api->getAccessToken(); //Second step addressed when the user is back to $oauthRedirectUri
+} catch (Exception $e) {
+	// OAuth failed
+	die($e->getMessage());
+}
 
 // OAuth2 process ok
 $userInfo = $api->getUserInfo($accessToken);
